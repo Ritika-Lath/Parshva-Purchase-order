@@ -14,7 +14,7 @@ function App() {
       {excelData ? (
         <DocketForm excelData={excelData} />
       ) : (
-        <p>Loading or invalid Excel data...</p>
+        null
       )}
     </div>
   );

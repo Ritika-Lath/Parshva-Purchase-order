@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 const DocketForm = ({ excelData }) => {
   // Define state variables to store the form data
@@ -8,6 +8,17 @@ const DocketForm = ({ excelData }) => {
   const [ratePerHour, setRatePerHour] = useState('');
   const [supplier, setSupplier] = useState(''); // Add state for the selected supplier
   const [dockets, setDockets] = useState([]);
+console.log("excel",excelData)
+
+
+useEffect(() => {
+  // Extract unique suppliers from excelData when it's available
+  if (excelData && excelData.Supplier) {
+    const uniqueSuppliers = [excelData.Supplier]; // You can modify this logic if there are multiple suppliers in your data
+    setSupplier(excelData.Supplier); // Set the default supplier
+  }
+}, [excelData]);
+
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -65,7 +76,7 @@ const DocketForm = ({ excelData }) => {
           <label>Supplier:</label>
           <select value={supplier} onChange={(e) => setSupplier(e.target.value)} required>
             <option value="">Select Supplier</option>
-            {excelData.suppliers.map((supplier, index) => (
+            {excelData.Supplier.map((supplier, index) => (
               <option key={index} value={supplier}>
                 {supplier}
               </option>
