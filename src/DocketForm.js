@@ -10,6 +10,7 @@ const DocketForm = ({ excelData }) => {
   const [supplierOptions, setSupplierOptions] = useState([]); 
   const [supplier, setSupplier] = useState(); // Add state for the selected supplier
   const [dockets, setDockets] = useState([]);
+  const [purchaseOrderOptions, setPurchaseOrderOptions] = useState([])
   const [purchaseOrder, setPurchaseOrder] = useState()
 console.log("excel",excelData)
 
@@ -31,6 +32,15 @@ useEffect(() => {
   }
   
 }, [excelData]);
+
+useEffect(() => {
+  if(supplier)
+  {
+    setPurchaseOrderOptions(getPurchaseOrder())
+  }
+  
+}, [supplier])
+
 
 const getPurchaseOrder=()=>{
  let filteredPurchaseOrder=[]
@@ -66,7 +76,8 @@ const getPurchaseOrder=()=>{
     setEndTime('');
     setRatePerHour('');
     setNoOfHoursWorked('')
-    setSupplier(''); // Clear the selected supplier
+    setSupplier('');
+    setPurchaseOrder('') // Clear the selected supplier
   };
 
   return (
@@ -102,6 +113,17 @@ const getPurchaseOrder=()=>{
             {supplierOptions && supplierOptions.map((supplierName, index) => (
               <option key={index} value={supplierName}>
                 {supplierName}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>PO:</label>
+          <select value={purchaseOrder} onChange={(e) => setPurchaseOrder(e.target.value)} required>
+            <option value="">Select PO</option>
+            {purchaseOrderOptions && purchaseOrderOptions.map((po, index) => (
+              <option key={index} value={po}>
+                {po}
               </option>
             ))}
           </select>
