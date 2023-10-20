@@ -15,7 +15,7 @@ function FileParser({setExcelData}) {
       const jsonSheet = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
       // Find the index of the "suppliers" column
-      const suppliersIndex = jsonSheet[0].indexOf("suppliers");
+      const suppliersIndex = jsonSheet[0].indexOf("Supplier");
 
       // Iterate through the rows and fill missing columns with data from the "suppliers" column
       for (let i = 1; i < jsonSheet.length; i++) {

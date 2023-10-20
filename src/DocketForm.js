@@ -7,43 +7,42 @@ const DocketForm = ({ excelData }) => {
   const [endTime, setEndTime] = useState('');
   const [noOfHoursWorked, setNoOfHoursWorked] = useState('')
   const [ratePerHour, setRatePerHour] = useState('');
-  const [supplier, setSupplier] = useState(''); // Add state for the selected supplier
+  const [supplier, setSupplier] = useState(); // Add state for the selected supplier
   const [dockets, setDockets] = useState([]);
+  const [purchaseOrder, setPurchaseOrder] = useState()
 console.log("excel",excelData)
 
 
 useEffect(() => {
-  // Extract unique suppliers from excelData when it's available
-  // if (excelData) {
-  //   excelData.map((data)=>{
-  //     console.log("data",data.Supplier)
-  //   })
-  //   setSupplier(excelData.Supplier); // Set the default supplier
-  // }
+
   if (excelData) {
     const uniqueSuppliers = new Set();
     excelData.forEach((data) => {
-      uniqueSuppliers.add(data.Supplier);
+      if (data && data.Supplier && data.Supplier.trim() !== "") {
+        uniqueSuppliers.add(data.Supplier.trim());
+      }
     });
   
-    // Now, uniqueSuppliers will contain unique supplier names.
-    // If you need to convert it back to an array, you can use the spread operator.
+   
     const uniqueSuppliersArray = [...uniqueSuppliers];
   
-    console.log("Unique Suppliers:", uniqueSuppliersArray);
-    setSupplier(uniqueSuppliersArray)
+    setSupplier(uniqueSuppliersArray);
   }
+  
 }, [excelData]);
 
-
+const getPurchaseOrder=()=>{
+ let filteredPurchaseOrder=[]
+      filteredPurchaseOrder= excelData.filter(data => data.Supplier === supplier);
+    return filteredPurchaseOrder
+//  console.log("filetyered",filteredPurchaseOrder)
+}
+console.log("gyjgy",getPurchaseOrder())
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Calculate the number of hours
-    // const hoursWorked = (new Date(endTime) - new Date(startTime)) / 3600000;
 
-    // Calculate the total amount
     const totalAmount = noOfHoursWorked * ratePerHour;
 
     // Create a new docket object
