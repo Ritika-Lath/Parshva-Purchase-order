@@ -1,7 +1,7 @@
 import React from 'react';
 import * as XLSX from 'xlsx';
 
-function FileParser({setExcelData}) {
+function FileParser({ setExcelData }) {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -12,32 +12,20 @@ function FileParser({setExcelData}) {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
 
-      const jsonSheet = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      // Convert the sheet to an array of objects
+      const jsonSheet = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-      // Find the index of the "suppliers" column
-      const suppliersIndex = jsonSheet[0].indexOf("Supplier");
-
-      // Iterate through the rows and fill missing columns with data from the "suppliers" column
+      // Iterate through each row and fill missing values with previous row's values
       for (let i = 1; i < jsonSheet.length; i++) {
-        for (let j = 0; j < jsonSheet[0].length; j++) {
-          if (j !== suppliersIndex && jsonSheet[i][j] === undefined) {
-            jsonSheet[i][j] = jsonSheet[i - 1][j];
+        for (let key in jsonSheet[i]) {
+          if (jsonSheet[i][key] === '') {
+            jsonSheet[i][key] = jsonSheet[i - 1][key];
           }
         }
       }
 
-      // Create JSON object with the first row as keys and the rest as values
-      const jsonData = jsonSheet.slice(1).map((row) => {
-        const entry = {};
-        jsonSheet[0].forEach((key, index) => {
-          entry[key] = row[index];
-        });
-        return entry;
-      });
-
       // Now you have the JSON data with filled missing columns
-      setExcelData(jsonData)
-      // console.log(jsonData);
+      setExcelData(jsonSheet);
     };
 
     reader.readAsBinaryString(file);
