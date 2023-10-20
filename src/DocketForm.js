@@ -7,6 +7,7 @@ const DocketForm = ({ excelData }) => {
   const [endTime, setEndTime] = useState('');
   const [noOfHoursWorked, setNoOfHoursWorked] = useState('')
   const [ratePerHour, setRatePerHour] = useState('');
+  const [supplierOptions, setSupplierOptions] = useState([]); 
   const [supplier, setSupplier] = useState(); // Add state for the selected supplier
   const [dockets, setDockets] = useState([]);
   const [purchaseOrder, setPurchaseOrder] = useState()
@@ -23,10 +24,10 @@ useEffect(() => {
       }
     });
   
-   
+   console.log("uniqueSuppliers",uniqueSuppliers)
     const uniqueSuppliersArray = [...uniqueSuppliers];
   
-    setSupplier(uniqueSuppliersArray);
+    setSupplierOptions(uniqueSuppliersArray);
   }
   
 }, [excelData]);
@@ -37,7 +38,7 @@ const getPurchaseOrder=()=>{
     return filteredPurchaseOrder
 //  console.log("filetyered",filteredPurchaseOrder)
 }
-console.log("gyjgy",getPurchaseOrder())
+// console.log("gyjgy",getPurchaseOrder())
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -96,8 +97,9 @@ console.log("gyjgy",getPurchaseOrder())
           <label>Supplier Name:</label>
           <select value={supplier} onChange={(e) => setSupplier(e.target.value)} required>
             <option value="">Select Supplier</option>
-            console.log("excelData",excelData)
-            {supplier && supplier.map((supplierName, index) => (
+            {/* {console.log("excelData",excelData)}
+            {console.log("supplier",supplier)} */}
+            {supplierOptions && supplierOptions.map((supplierName, index) => (
               <option key={index} value={supplierName}>
                 {supplierName}
               </option>
@@ -120,4 +122,4 @@ console.log("gyjgy",getPurchaseOrder())
   );
 };
 
-export default DocketForm;
+export default DocketForm;
