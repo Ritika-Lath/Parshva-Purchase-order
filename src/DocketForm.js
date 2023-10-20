@@ -5,6 +5,7 @@ const DocketForm = ({ excelData }) => {
   const [name, setName] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [noOfHoursWorked, setNoOfHoursWorked] = useState('')
   const [ratePerHour, setRatePerHour] = useState('');
   const [supplier, setSupplier] = useState(''); // Add state for the selected supplier
   const [dockets, setDockets] = useState([]);
@@ -13,9 +14,24 @@ console.log("excel",excelData)
 
 useEffect(() => {
   // Extract unique suppliers from excelData when it's available
-  if (excelData && excelData.Supplier) {
-    const uniqueSuppliers = [excelData.Supplier]; // You can modify this logic if there are multiple suppliers in your data
-    setSupplier(excelData.Supplier); // Set the default supplier
+  // if (excelData) {
+  //   excelData.map((data)=>{
+  //     console.log("data",data.Supplier)
+  //   })
+  //   setSupplier(excelData.Supplier); // Set the default supplier
+  // }
+  if (excelData) {
+    const uniqueSuppliers = new Set();
+    excelData.forEach((data) => {
+      uniqueSuppliers.add(data.Supplier);
+    });
+  
+    // Now, uniqueSuppliers will contain unique supplier names.
+    // If you need to convert it back to an array, you can use the spread operator.
+    const uniqueSuppliersArray = [...uniqueSuppliers];
+  
+    console.log("Unique Suppliers:", uniqueSuppliersArray);
+    setSupplier(uniqueSuppliersArray)
   }
 }, [excelData]);
 
@@ -25,17 +41,17 @@ useEffect(() => {
     e.preventDefault();
 
     // Calculate the number of hours
-    const hoursWorked = (new Date(endTime) - new Date(startTime)) / 3600000;
+    // const hoursWorked = (new Date(endTime) - new Date(startTime)) / 3600000;
 
     // Calculate the total amount
-    const totalAmount = hoursWorked * ratePerHour;
+    const totalAmount = noOfHoursWorked * ratePerHour;
 
     // Create a new docket object
     const newDocket = {
       name,
       startTime,
       endTime,
-      hoursWorked,
+      noOfHoursWorked,
       ratePerHour,
       totalAmount,
       supplier, // Include the selected supplier
@@ -49,6 +65,7 @@ useEffect(() => {
     setStartTime('');
     setEndTime('');
     setRatePerHour('');
+    setNoOfHoursWorked('')
     setSupplier(''); // Clear the selected supplier
   };
 
@@ -69,16 +86,21 @@ useEffect(() => {
           <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
         </div>
         <div>
+          <label>No Of Hours Worked:</label>
+          <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+        </div>
+        <div>
           <label>Rate per Hour:</label>
           <input type="number" value={ratePerHour} onChange={(e) => setRatePerHour(e.target.value)} required />
         </div>
         <div>
-          <label>Supplier:</label>
+          <label>Supplier Name:</label>
           <select value={supplier} onChange={(e) => setSupplier(e.target.value)} required>
             <option value="">Select Supplier</option>
-            {excelData.Supplier.map((supplier, index) => (
-              <option key={index} value={supplier}>
-                {supplier}
+            console.log("excelData",excelData)
+            {supplier && supplier.map((supplierName, index) => (
+              <option key={index} value={supplierName}>
+                {supplierName}
               </option>
             ))}
           </select>
