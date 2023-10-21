@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 
-const DocketForm = ({ excelData }) => {
+const DocketForm = ({ excelData,dockets,setDockets,isOpen,setIsOpen }) => {
   // Define state variables to store the form data
   const [name, setName] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -9,7 +9,6 @@ const DocketForm = ({ excelData }) => {
   const [ratePerHour, setRatePerHour] = useState('');
   const [supplierOptions, setSupplierOptions] = useState([]); 
   const [supplier, setSupplier] = useState(); // Add state for the selected supplier
-  const [dockets, setDockets] = useState([]);
   const [purchaseOrderOptions, setPurchaseOrderOptions] = useState([])
   const [purchaseOrder, setPurchaseOrder] = useState()
 
@@ -44,11 +43,22 @@ const getPurchaseOrder=()=>{
       filteredPurchaseOrder= excelData.filter(data => data.Supplier === supplier);
     return filteredPurchaseOrder
 }
-console.log("Purchase Order: ",purchaseOrder)
-  // Handle form submission
+const totalHoursAvailable = (new Date(endTime) - new Date(startTime)) / 3600000;
+
+const handleNoOfHoursInputChange = (e) => {
+  const newValue = e.target.value;
+  if (newValue <= totalHoursAvailable) {
+    setNoOfHoursWorked(newValue);
+  } else {
+    // Display an error message or take some other action
+    // console.error('Error: Hours worked exceed total hours available.');
+    window.alert('Error: Hours worked exceed total hours available.');
+  }
+};
+
+// Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
 
     const totalAmount = noOfHoursWorked * ratePerHour;
 
@@ -75,7 +85,8 @@ console.log("Purchase Order: ",purchaseOrder)
     setRatePerHour('');
     setNoOfHoursWorked('')
     setSupplier('');
-    setPurchaseOrder() // Clear the selected supplier
+    setPurchaseOrder('') 
+    setIsOpen(false)
   };
 
   return (
@@ -95,9 +106,14 @@ console.log("Purchase Order: ",purchaseOrder)
           <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
         </div>
         <div>
-          <label>No Of Hours Worked:</label>
-          <input type="number" value={noOfHoursWorked} onChange={(e) => setNoOfHoursWorked(e.target.value)} required />
-        </div>
+      <label>No Of Hours Worked:</label>
+      <input
+        type="number"
+        value={noOfHoursWorked}
+        onChange={handleNoOfHoursInputChange}
+        required
+      />
+    </div>
         <div>
           <label>Rate per Hour:</label>
           <input type="number" value={ratePerHour} onChange={(e) => setRatePerHour(e.target.value)} required />
@@ -116,7 +132,6 @@ console.log("Purchase Order: ",purchaseOrder)
         <div>
           <label>PO:</label>
           <select value={purchaseOrder} onChange={(e) =>{ 
-            console.log("purchase", e.target.value)
             setPurchaseOrder(e.target.value)}} required>
             <option value="">Select PO</option>
             {purchaseOrderOptions && purchaseOrderOptions.map((po, index) => (
@@ -128,7 +143,7 @@ console.log("Purchase Order: ",purchaseOrder)
         </div>
         <button type="submit">Create Docket</button>
       </form>
-      <div>
+      {/* <div>
         <h2>Dockets</h2>
         <ul>
           {dockets.map((docket, index) => (
@@ -138,7 +153,7 @@ console.log("Purchase Order: ",purchaseOrder)
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
