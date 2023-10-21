@@ -12,10 +12,8 @@ function FileParser({ setExcelData }) {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
 
-      // Convert the sheet to an array of objects
       const jsonSheet = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-      // Iterate through each row and fill missing values with previous row's values
       for (let i = 1; i < jsonSheet.length; i++) {
         for (let key in jsonSheet[i]) {
           if (jsonSheet[i][key] === '') {
@@ -24,7 +22,6 @@ function FileParser({ setExcelData }) {
         }
       }
 
-      // Now you have the JSON data with filled missing columns
       setExcelData(jsonSheet);
     };
 

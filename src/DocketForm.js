@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 
 const DocketForm = ({ excelData,dockets,setDockets,isOpen,setIsOpen }) => {
-  // Define state variables to store the form data
+
   const [name, setName] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
@@ -50,19 +50,16 @@ const handleNoOfHoursInputChange = (e) => {
   if (newValue <= totalHoursAvailable) {
     setNoOfHoursWorked(newValue);
   } else {
-    // Display an error message or take some other action
-    // console.error('Error: Hours worked exceed total hours available.');
+   
     window.alert('Error: Hours worked exceed total hours available.');
   }
 };
 
-// Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const totalAmount = noOfHoursWorked * ratePerHour;
 
-    // Create a new docket object
     const newDocket = {
       name,
       startTime,
@@ -75,10 +72,8 @@ const handleNoOfHoursInputChange = (e) => {
       poNumber:  JSON.parse(purchaseOrder)["PO Number"] // Include the selected supplier
     };
 
-    // Add the new docket to the dockets array
     setDockets([...dockets, newDocket]);
 
-    // Clear the form inputs
     setName('');
     setStartTime('');
     setEndTime('');
@@ -143,17 +138,6 @@ const handleNoOfHoursInputChange = (e) => {
         </div>
         <button type="submit">Create Docket</button>
       </form>
-      {/* <div>
-        <h2>Dockets</h2>
-        <ul>
-          {dockets.map((docket, index) => (
-            <li key={index}>
-              Name: {docket.name}, Hours Worked: {docket.noOfHoursWorked}, Total Amount: {docket.totalAmount}, Supplier: {docket.supplier},
-              PO Number: {docket.poNumber} , Description: {docket.description}
-            </li>
-          ))}
-        </ul>
-      </div> */}
     </div>
   );
 };
