@@ -33,8 +33,15 @@ function App() {
         <ul>
           {dockets.map((docket, index) => (
             <li key={index}>
-              Name: {docket.name}, Hours Worked: {docket.noOfHoursWorked}, Total Amount: {docket.totalAmount}, Supplier: {docket.supplier},
-              PO Number: {docket.poNumber} , Description: {docket.description}
+              Name: {docket.name},
+              Start Time:{docket.startTime},
+              End Time:{docket.endTime}, 
+              Hours Worked: {docket.noOfHoursWorked},
+              Rate Per Hour:{docket.ratePerHour}, 
+              Total Amount: {docket.totalAmount}, 
+              Supplier: {docket.supplier},
+              PO Number: {docket.poNumber} , 
+              Description: {docket.description}
             </li>
           ))}
         </ul>
