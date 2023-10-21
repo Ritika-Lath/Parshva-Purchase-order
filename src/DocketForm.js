@@ -96,7 +96,7 @@ console.log("Purchase Order: ",purchaseOrder)
         </div>
         <div>
           <label>No Of Hours Worked:</label>
-          <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+          <input type="number" value={noOfHoursWorked} onChange={(e) => setNoOfHoursWorked(e.target.value)} required />
         </div>
         <div>
           <label>Rate per Hour:</label>
