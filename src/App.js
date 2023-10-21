@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div>
-      <h1>CSV Parser</h1>
+      <h1>File Parser</h1>
       <FileParser setExcelData={setExcelData} />
       {isOpen? 
       <Popup isOpen={isOpen} setIsOpen={setIsOpen} dockets={dockets} setDockets={setDockets} excelData={excelData}/>
