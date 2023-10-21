@@ -12,7 +12,6 @@ const DocketForm = ({ excelData }) => {
   const [dockets, setDockets] = useState([]);
   const [purchaseOrderOptions, setPurchaseOrderOptions] = useState([])
   const [purchaseOrder, setPurchaseOrder] = useState()
-console.log("excel",excelData)
 
 
 useEffect(() => {
@@ -25,7 +24,6 @@ useEffect(() => {
       }
     });
   
-   console.log("uniqueSuppliers",uniqueSuppliers)
     const uniqueSuppliersArray = [...uniqueSuppliers];
   
     setSupplierOptions(uniqueSuppliersArray);
@@ -41,14 +39,12 @@ useEffect(() => {
   
 }, [supplier])
 
-
 const getPurchaseOrder=()=>{
  let filteredPurchaseOrder=[]
       filteredPurchaseOrder= excelData.filter(data => data.Supplier === supplier);
     return filteredPurchaseOrder
-//  console.log("filetyered",filteredPurchaseOrder)
 }
-// console.log("gyjgy",getPurchaseOrder())
+console.log("Purchase Order: ",purchaseOrder)
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,7 +60,9 @@ const getPurchaseOrder=()=>{
       noOfHoursWorked,
       ratePerHour,
       totalAmount,
-      supplier, // Include the selected supplier
+      supplier,
+      description: JSON.parse(purchaseOrder)["Description"],
+      poNumber:  JSON.parse(purchaseOrder)["PO Number"] // Include the selected supplier
     };
 
     // Add the new docket to the dockets array
@@ -77,7 +75,7 @@ const getPurchaseOrder=()=>{
     setRatePerHour('');
     setNoOfHoursWorked('')
     setSupplier('');
-    setPurchaseOrder('') // Clear the selected supplier
+    setPurchaseOrder() // Clear the selected supplier
   };
 
   return (
@@ -106,10 +104,8 @@ const getPurchaseOrder=()=>{
         </div>
         <div>
           <label>Supplier Name:</label>
-          <select value={supplier} onChange={(e) => setSupplier(e.target.value)} required>
+          <select value={supplier} onChange={(e) => {setSupplier(e.target.value)}} required>
             <option value="">Select Supplier</option>
-            {/* {console.log("excelData",excelData)}
-            {console.log("supplier",supplier)} */}
             {supplierOptions && supplierOptions.map((supplierName, index) => (
               <option key={index} value={supplierName}>
                 {supplierName}
@@ -119,11 +115,13 @@ const getPurchaseOrder=()=>{
         </div>
         <div>
           <label>PO:</label>
-          <select value={purchaseOrder} onChange={(e) => setPurchaseOrder(e.target.value)} required>
+          <select value={purchaseOrder} onChange={(e) =>{ 
+            console.log("purchase", e.target.value)
+            setPurchaseOrder(e.target.value)}} required>
             <option value="">Select PO</option>
             {purchaseOrderOptions && purchaseOrderOptions.map((po, index) => (
-              <option key={index} value={po}>
-                {po}
+              <option key={index} value={JSON.stringify(po)}>
+                {po["PO Number"]}
               </option>
             ))}
           </select>
@@ -135,7 +133,8 @@ const getPurchaseOrder=()=>{
         <ul>
           {dockets.map((docket, index) => (
             <li key={index}>
-              Name: {docket.name}, Hours Worked: {docket.hoursWorked}, Total Amount: {docket.totalAmount}, Supplier: {docket.supplier}
+              Name: {docket.name}, Hours Worked: {docket.noOfHoursWorked}, Total Amount: {docket.totalAmount}, Supplier: {docket.supplier},
+              PO Number: {docket.poNumber} , Description: {docket.description}
             </li>
           ))}
         </ul>
